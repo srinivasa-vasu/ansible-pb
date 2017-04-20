@@ -1,0 +1,16 @@
+---
+- name: Stop OpenShift Container Platform
+  command: "oc cluster down --docker-machine={{ item.dm_name }}"
+  register: ocp_status
+  with_items:
+    - "{{ ocp_dm }}"
+  tags:
+    - openshift
+
+- name: Stop Docker Machine
+  command: "docker-machine stop {{ item.dm_name }}"
+  when: ocp_status|success
+  with_items:
+    - "{{ ocp_dm }}"
+  tags:
+    - docker_machine

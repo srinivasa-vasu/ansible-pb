@@ -1,0 +1,2 @@
+[ocp]
+localhost ansible_connection=local

@@ -1,0 +1,26 @@
+---
+- name: Set Minishift Config
+  shell: "minishift config set vm-driver {{ item.driver }} && minishift config set cpus {{ item.cpu }} && minishift config set memory {{ item.memory }} && minishift config set openshift-version {{ item.version }}"
+  register: config_status
+  with_items:
+    - "{{ ocp_origin }}"
+  tags:
+    - minishift
+
+- name: Install OpenShift Origin
+  command: "minishift start"
+  register: install_status
+  when: config_status|success
+  tags:
+    - minishift
+
+- name: Register Openshift Origin IP
+  shell: "minishift ip"
+  register: get_ocp_ins_ip
+  when: install_status|success
+  tags:
+    - OCP
+
+- name: Show OpenShift Origin IP
+  debug:
+    msg: "https://{{ get_ocp_ins_ip.results[0].stdout }}:8443"

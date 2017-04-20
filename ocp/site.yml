@@ -1,0 +1,11 @@
+- hosts: ocp
+  vars_files:
+    - vars/vars.yml
+  roles:
+    - { role: ocp-install, tags: [ 'ocp-install' ] }
+    - { role: ocp-start, tags: [ 'ocp-start' ] }
+    - { role: ocp-stop, tags: [ 'ocp-stop' ] }
+    - { role: ocp-remove, tags: [ 'ocp-remove' ] }
+    - { role: cdk-install, tags: [ 'cdk-install' ] }
+    - { role: origin-install, tags: [ 'origin-install' ] }
+    - { role: origin-remove, tags: [ 'origin-remove' ] }

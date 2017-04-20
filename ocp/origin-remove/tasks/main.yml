@@ -1,0 +1,21 @@
+---
+- name: Uninstall Origin
+  command: "minishift delete"
+  register: delete_status
+  tags:
+    - minishift
+
+- name: Uninstall Origin Status
+  debug:
+    msg: "{{ delete_status.stdout }}"
+
+- name: Remove minishift cached data
+  file:
+    state: absent
+    path: "{{ lookup('env','HOME') }}/.{{ item }}/"
+  when: delete_status|success
+  with_items:
+    - "minishift"
+    - "kube"
+  tags:
+    - minishift

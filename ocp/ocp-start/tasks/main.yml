@@ -1,0 +1,34 @@
+---
+- name: Start Docker Machine
+  command: "docker-machine start {{ item.dm_name }}"
+  register: dm_status
+  with_items:
+    - "{{ ocp_dm }}"
+  tags:
+    - docker_machine
+
+- name: Start OpenShift Container Platform
+  command: "oc cluster up --image={{ item.image }} --version={{ item.version }} --docker-machine={{ item.dm_name }} --host-data-dir={{ item.data_dir }} --use-existing-config"
+  register: ocp_status
+  when: dm_status|success
+  with_items:
+    - "{{ ocp_dm }}"
+  tags:
+    - openshift
+
+- name: Get OpenShift Container Platform IP
+  command: "docker-machine ip {{ item.dm_name }}"
+  register: ocp_ins_ip
+  when: ocp_status|success
+  with_items:
+    - "{{ ocp_dm }}"
+  tags:
+    - openshift
+
+- name: Set OpenShift Container Platform IP
+  set_fact:
+    get_ocp_ip: "https://{{ ocp_ins_ip.results[0].stdout }}:8443"
+
+- name: Display OpenShift Container Platform IP
+  debug:
+    msg: "{{ get_ocp_ip }}"

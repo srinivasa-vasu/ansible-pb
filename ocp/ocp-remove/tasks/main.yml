@@ -1,0 +1,18 @@
+---
+- name: Uninstall OCP
+  command: "docker-machine rm -f {{ item.dm_name }}"
+  register: delete_status
+  with_items:
+    - "{{ ocp_dm }}"
+  tags:
+    - openshift
+
+- name: Remove docker-machine cached data
+  file:
+    state: absent
+    path: "{{ lookup('env','HOME') }}/.docker/machine/machines/{{ item.dm_name }}/"
+  when: delete_status|success
+  with_items:
+    - "{{ ocp_dm }}"
+  tags:
+    - openshift
