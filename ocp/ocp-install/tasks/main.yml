@@ -8,7 +8,7 @@
     - docker_machine
 
 - name: Install OpenShift Container Platform
-  command: "oc cluster up --image={{ item.image }} --version={{ item.version }} --docker-machine={{ item.dm_name }} --host-data-dir={{ item.data_dir }} --use-existing-config"
+  command: "oc cluster up --image={{ item.image }} --version={{ item.version }} --docker-machine={{ item.dm_name }} --host-data-dir={{ item.data_dir }} --host-config-dir={{ item.config_dir }} --use-existing-config=true"
   register: ocp_status
   when: dm_status|success
   with_items:

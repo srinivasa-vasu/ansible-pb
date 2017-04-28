@@ -10,6 +10,7 @@ ocp_dm:
     image: "registry.access.redhat.com/openshift3/ose"
     version: "v3.5.5.5-2"
     data_dir: "/var/lib/origin/openshift.local.data/"
+    config_dir: "/var/lib/origin/openshift.local.config/"
 # Origin
 ocp_origin:
   - driver: "virtualbox"
